@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Treasury | Settings</title>
+  <link rel="stylesheet" href="../Styles/Dashboard.css" />
+  <link rel="stylesheet" href="../Styles/Settings.css" />
+</head>
+<body>
+  <div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="../Assets/logo.png" alt="Logo" onerror="this.style.display='none'" />
+        <span>AdminTreasury</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="Dashboard.html" class="nav-item">&#9632; Dashboard</a>
+        <a href="Tithes.html" class="nav-item">&#9632; Tithes</a>
+        <a href="Offerings.html" class="nav-item">&#9632; Offerings</a>
+        <a href="Churches.html" class="nav-item">&#9632; Churches</a>
+        <a href="Settings.html" class="nav-item active">&#9632; Settings</a>
+      </nav>
+      <a href="#" id="logout-btn" class="sidebar-logout">&#9632; Logout</a>
+    </aside>
+
+    <!-- Main -->
+    <div class="main">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <h2>Settings</h2>
+        <div class="topbar-right">
+          <span class="topbar-date" id="today-date"></span>
+          <div class="topbar-user">
+            <div class="user-info">
+              <span id="user-name" class="user-name"></span>
+              <span id="user-role" class="user-role"></span>
+            </div>
+            <div class="avatar" id="user-avatar"></div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Settings Content -->
+      <div class="settings-wrapper">
+
+        <!-- Profile Info -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <h3>Profile Information</h3>
+            <p>View your account details</p>
+          </div>
+          <div class="profile-grid">
+            <div class="profile-field">
+              <span class="field-label">Full Name</span>
+              <span class="field-value" id="profile-name">—</span>
+            </div>
+            <div class="profile-field">
+              <span class="field-label">Username</span>
+              <span class="field-value" id="profile-username">—</span>
+            </div>
+            <div class="profile-field">
+              <span class="field-label">Role</span>
+              <span class="field-value" id="profile-role">—</span>
+            </div>
+            <div class="profile-field">
+              <span class="field-label">Mission Code</span>
+              <span class="field-value" id="profile-mission">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <h3>Change Password</h3>
+            <p>Update your login password</p>
+          </div>
+          <form id="change-password-form">
+            <p id="pw-msg" class="settings-msg"></p>
+            <div class="form-group">
+              <label for="current-password">Current Password</label>
+              <div class="input-wrapper">
+                <input type="password" id="current-password" placeholder="Enter current password" required />
+                <span class="toggle-password" data-target="current-password">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="new-password">New Password</label>
+              <div class="input-wrapper">
+                <input type="password" id="new-password" placeholder="Enter new password" required />
+                <span class="toggle-password" data-target="new-password">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="confirm-password">Confirm New Password</label>
+              <div class="input-wrapper">
+                <input type="password" id="confirm-password" placeholder="Confirm new password" required />
+                <span class="toggle-password" data-target="confirm-password">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </span>
+              </div>
+            </div>
+            <button type="submit" class="btn-save" id="btn-save-pw">Update Password</button>
+          </form>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="settings-card danger-zone">
+          <div class="settings-card-header">
+            <h3>Session</h3>
+            <p>Manage your active session</p>
+          </div>
+          <button class="btn-danger" id="btn-logout-settings">Sign Out of All Sessions</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../Scripts/supabase.js"></script>
+  <script src="../Scripts/guard.js"></script>
+  <script src="../Scripts/settings.js"></script>
+</body>
+</html>

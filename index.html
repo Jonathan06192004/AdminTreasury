@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Treasury | Login</title>
+  <link rel="stylesheet" href="Styles/index.css" />
+</head>
+<body>
+  <div class="login-wrapper">
+    <div class="login-card">
+      <div class="login-header">
+        <img src="Assets/logo.png" alt="Logo" class="logo" onerror="this.style.display='none'" />
+        <h1>Admin Treasury</h1>
+        <p>Sign in to your account</p>
+      </div>
+
+      <form class="login-form" id="login-form">
+        <p id="error-msg" class="error-msg"></p>
+
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="Enter your username" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="password" name="password" placeholder="••••••••" required />
+            <span class="toggle-password" id="toggle-password">
+              <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-login" id="btn-login">Sign In</button>
+      </form>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="Scripts/supabase.js"></script>
+  <script src="Scripts/index.js"></script>
+  <script src="Scripts/auth.js"></script>
+</body>
+</html>

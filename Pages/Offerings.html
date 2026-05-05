@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Treasury | Offerings</title>
+  <link rel="stylesheet" href="../Styles/Dashboard.css" />
+  <link rel="stylesheet" href="../Styles/Tithes.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="../Assets/logo.png" alt="Logo" onerror="this.style.display='none'" />
+        <span>AdminTreasury</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="Dashboard.html" class="nav-item">&#9632; Dashboard</a>
+        <a href="Tithes.html" class="nav-item">&#9632; Tithes</a>
+        <a href="Offerings.html" class="nav-item active">&#9632; Offerings</a>
+        <a href="Churches.html" class="nav-item">&#9632; Churches</a>
+        <a href="Settings.html" class="nav-item">&#9632; Settings</a>
+      </nav>
+      <a href="#" id="logout-btn" class="sidebar-logout">&#9632; Logout</a>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <h2>Offerings</h2>
+        <div class="topbar-right">
+          <span class="topbar-date" id="today-date"></span>
+          <div class="topbar-user">
+            <div class="user-info">
+              <span id="user-name" class="user-name"></span>
+              <span id="user-role" class="user-role"></span>
+            </div>
+            <div class="avatar" id="user-avatar"></div>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <div class="mission-tabs" id="mission-tabs"></div>
+
+        <div class="data-card">
+          <div class="data-card-header">
+            <div>
+              <h3 id="table-title">Offerings</h3>
+              <p id="table-subtitle" class="subtitle"></p>
+            </div>
+            <div class="header-actions">
+              <div class="filter-group">
+                <select id="filter-year" class="filter-select">
+                  <option value="">All Years</option>
+                </select>
+              </div>
+              <button class="btn-add" id="btn-add">+ Add Entry</button>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Month</th>
+                <th>Amount</th>
+                <th>Budget</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tithes-tbody">
+              <tr><td colspan="5" class="empty-row">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title">Add Entry</h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <form id="entry-form">
+        <input type="hidden" id="entry-id" />
+        <div class="form-group">
+          <label for="entry-year">Year</label>
+          <input type="number" id="entry-year" placeholder="e.g. 2025" min="2000" max="2100" required />
+        </div>
+        <div class="form-group">
+          <label for="entry-month">Month</label>
+          <select id="entry-month" required>
+            <option value="">Select month</option>
+            <option value="1">January</option><option value="2">February</option>
+            <option value="3">March</option><option value="4">April</option>
+            <option value="5">May</option><option value="6">June</option>
+            <option value="7">July</option><option value="8">August</option>
+            <option value="9">September</option><option value="10">October</option>
+            <option value="11">November</option><option value="12">December</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="entry-amount">Amount</label>
+          <input type="number" id="entry-amount" placeholder="0.00" step="0.01" min="0" required />
+        </div>
+        <div class="form-group">
+          <label for="entry-budget">Budget</label>
+          <input type="number" id="entry-budget" placeholder="0.00" step="0.01" min="0" required />
+        </div>
+        <p id="modal-msg" class="modal-msg"></p>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="btn-cancel">Cancel</button>
+          <button type="submit" class="btn-save" id="btn-submit">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div class="modal-overlay" id="delete-overlay">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h3>Confirm Delete</h3>
+        <button class="modal-close" id="delete-close">&times;</button>
+      </div>
+      <p style="margin-bottom:1.5rem;color:#555;font-size:0.9rem;">Are you sure you want to delete this entry? This cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="delete-cancel">Cancel</button>
+        <button class="btn-danger" id="delete-confirm">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../Scripts/supabase.js"></script>
+  <script src="../Scripts/guard.js"></script>
+  <script src="../Scripts/offerings.js"></script>
+</body>
+</html>
