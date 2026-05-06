@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Treasury | Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="../Styles/Dashboard.css" />
   <link rel="stylesheet" href="../Styles/Settings.css" />
 </head>
@@ -12,34 +16,49 @@
 
     <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="sidebar-logo">
-        <img src="../Assets/logo.png" alt="Logo" onerror="this.style.display='none'" />
-        <span>AdminTreasury</span>
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="logo-box">AT</div>
+          <span>AdminTreasury</span>
+        </div>
       </div>
       <nav class="sidebar-nav">
-        <a href="Dashboard.html" class="nav-item">&#9632; Dashboard</a>
-        <a href="Tithes.html" class="nav-item">&#9632; Tithes</a>
-        <a href="Offerings.html" class="nav-item">&#9632; Offerings</a>
-        <a href="Churches.html" class="nav-item">&#9632; Churches</a>
-        <a href="Settings.html" class="nav-item active">&#9632; Settings</a>
+        <div class="nav-group">Main Menu</div>
+        <a href="Dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+        <a href="Tithes.html" class="nav-item"><i data-lucide="heart"></i> Tithes</a>
+        <a href="Offerings.html" class="nav-item"><i data-lucide="hand-coins"></i> Offerings</a>
+        <a href="Churches.html" class="nav-item"><i data-lucide="church"></i> Churches</a>
+        <div class="nav-group">System</div>
+        <a href="Settings.html" class="nav-item active"><i data-lucide="settings"></i> Settings</a>
       </nav>
-      <a href="#" id="logout-btn" class="sidebar-logout">&#9632; Logout</a>
     </aside>
 
     <!-- Main -->
-    <div class="main">
+    <main class="main">
 
       <!-- Topbar -->
       <header class="topbar">
-        <h2>Settings</h2>
+        <div class="page-title">
+          <h2>Settings</h2>
+          <p class="topbar-date" id="today-date"></p>
+        </div>
         <div class="topbar-right">
-          <span class="topbar-date" id="today-date"></span>
           <div class="topbar-user">
             <div class="user-info">
               <span id="user-name" class="user-name"></span>
               <span id="user-role" class="user-role"></span>
             </div>
             <div class="avatar" id="user-avatar"></div>
+          </div>
+          <div class="settings-menu-wrap">
+            <button class="settings-burger" id="settings-burger" aria-label="Menu">
+              <i data-lucide="menu"></i>
+            </button>
+            <div class="settings-dropdown" id="settings-dropdown">
+              <button class="dropdown-logout" id="logout-btn">
+                <i data-lucide="log-out"></i> Logout
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -50,8 +69,13 @@
         <!-- Profile Info -->
         <div class="settings-card">
           <div class="settings-card-header">
-            <h3>Profile Information</h3>
-            <p>View your account details</p>
+            <div class="card-icon-wrap">
+              <i data-lucide="user" width="20" height="20"></i>
+            </div>
+            <div class="header-text">
+              <h3>Profile Information</h3>
+              <p>View your account details</p>
+            </div>
           </div>
           <div class="profile-grid">
             <div class="profile-field">
@@ -76,8 +100,13 @@
         <!-- Change Password -->
         <div class="settings-card">
           <div class="settings-card-header">
-            <h3>Change Password</h3>
-            <p>Update your login password</p>
+            <div class="card-icon-wrap">
+              <i data-lucide="lock" width="20" height="20"></i>
+            </div>
+            <div class="header-text">
+              <h3>Change Password</h3>
+              <p>Update your login password</p>
+            </div>
           </div>
           <form id="change-password-form">
             <p id="pw-msg" class="settings-msg"></p>
@@ -121,19 +150,34 @@
         <!-- Danger Zone -->
         <div class="settings-card danger-zone">
           <div class="settings-card-header">
-            <h3>Session</h3>
-            <p>Manage your active session</p>
+            <div class="card-icon-wrap">
+              <i data-lucide="shield-alert" width="20" height="20"></i>
+            </div>
+            <div class="header-text">
+              <h3>Session</h3>
+              <p>Manage your active session</p>
+            </div>
           </div>
           <button class="btn-danger" id="btn-logout-settings">Sign Out of All Sessions</button>
         </div>
 
       </div>
-    </div>
+    </main>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../Scripts/supabase.js"></script>
   <script src="../Scripts/guard.js"></script>
   <script src="../Scripts/settings.js"></script>
+  <script>
+    lucide.createIcons();
+    const burger = document.getElementById('settings-burger');
+    const dropdown = document.getElementById('settings-dropdown');
+    burger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', () => dropdown.classList.remove('open'));
+  </script>
 </body>
 </html>

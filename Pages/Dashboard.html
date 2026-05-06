@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Treasury | Dashboard</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="../Styles/Dashboard.css" />
 </head>
 <body>
@@ -11,124 +17,128 @@
 
     <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="sidebar-logo">
-        <img src="../Assets/logo.png" alt="Logo" onerror="this.style.display='none'" />
-        <span>AdminTreasury</span>
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="logo-box">AT</div>
+          <span>AdminTreasury</span>
+        </div>
       </div>
+      
       <nav class="sidebar-nav">
-        <a href="Dashboard.html" class="nav-item active">&#9632; Dashboard</a>
-        <a href="Tithes.html" class="nav-item">&#9632; Tithes</a>
-        <a href="Offerings.html" class="nav-item">&#9632; Offerings</a>
-        <a href="Churches.html" class="nav-item">&#9632; Churches</a>
-        <a href="Settings.html" class="nav-item">&#9632; Settings</a>
+        <div class="nav-group">Main Menu</div>
+        <a href="Dashboard.html" class="nav-item active"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+        <a href="Tithes.html" class="nav-item"><i data-lucide="heart"></i> Tithes</a>
+        <a href="Offerings.html" class="nav-item"><i data-lucide="hand-coins"></i> Offerings</a>
+        <a href="Churches.html" class="nav-item"><i data-lucide="church"></i> Churches</a>
+        
+        <div class="nav-group">System</div>
+        <a href="Settings.html" class="nav-item"><i data-lucide="settings"></i> Settings</a>
       </nav>
-      <a href="#" id="logout-btn" class="sidebar-logout">&#9632; Logout</a>
+
     </aside>
 
     <!-- Main Content -->
-    <div class="main">
+    <main class="main">
 
       <!-- Topbar -->
       <header class="topbar">
-        <h2>Dashboard</h2>
+        <div class="page-title">
+          <h2>Dashboard</h2>
+          <p class="topbar-date" id="today-date">Wednesday, May 6, 2026</p>
+        </div>
+        
         <div class="topbar-right">
-          <span class="topbar-date" id="today-date"></span>
           <div class="topbar-user">
             <div class="user-info">
-              <span id="user-name" class="user-name"></span>
-              <span id="user-role" class="user-role"></span>
+              <span id="user-name" class="user-name">John Doe</span>
+              <span id="user-role" class="user-role">Administrator</span>
             </div>
-            <div class="avatar" id="user-avatar"></div>
+            <div class="avatar" id="user-avatar">JD</div>
           </div>
         </div>
       </header>
 
-      <!-- Stat Cards -->
-      <section class="cards">
-        <div class="card">
-          <p class="card-label">Total Balance</p>
-          <h3 class="card-value">$48,295.00</h3>
-          <span class="card-badge positive">+2.4% this month</span>
-        </div>
-        <div class="card">
-          <p class="card-label">Total Income</p>
-          <h3 class="card-value">$12,540.00</h3>
-          <span class="card-badge positive">+5.1% this month</span>
-        </div>
-        <div class="card">
-          <p class="card-label">Total Expenses</p>
-          <h3 class="card-value">$7,320.00</h3>
-          <span class="card-badge negative">+1.8% this month</span>
-        </div>
-        <div class="card">
-          <p class="card-label">Pending Approvals</p>
-          <h3 class="card-value">6</h3>
-          <span class="card-badge neutral">Needs review</span>
-        </div>
-      </section>
+      <!-- Content Area -->
+      <div class="content-body">
+        <!-- Stat Cards -->
+        <section class="cards">
+          <div class="card">
+            <div class="card-icon income"><i data-lucide="wallet"></i></div>
+            <div class="card-details">
+              <p class="card-label">Total Balance</p>
+              <h3 class="card-value">$48,295.00</h3>
+              <span class="card-badge positive">↑ 2.4%</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-icon positive"><i data-lucide="trending-up"></i></div>
+            <div class="card-details">
+              <p class="card-label">Total Income</p>
+              <h3 class="card-value">$12,540.00</h3>
+              <span class="card-badge positive">↑ 5.1%</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-icon negative"><i data-lucide="trending-down"></i></div>
+            <div class="card-details">
+              <p class="card-label">Total Expenses</p>
+              <h3 class="card-value">$7,320.00</h3>
+              <span class="card-badge negative">↑ 1.8%</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-icon neutral"><i data-lucide="clock"></i></div>
+            <div class="card-details">
+              <p class="card-label">Pending</p>
+              <h3 class="card-value">6</h3>
+              <span class="card-badge neutral">Needs review</span>
+            </div>
+          </div>
+        </section>
 
-      <!-- Recent Transactions -->
-      <section class="table-section">
-        <div class="table-header">
-          <h3>Recent Transactions</h3>
-          <a href="#" class="view-all">View all</a>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>Category</th>
-              <th>Date</th>
-              <th>Amount</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Office Supplies</td>
-              <td>Operations</td>
-              <td>Jul 1, 2025</td>
-              <td class="negative">-$320.00</td>
-              <td><span class="badge approved">Approved</span></td>
-            </tr>
-            <tr>
-              <td>Donation — Hope Fund</td>
-              <td>Income</td>
-              <td>Jun 30, 2025</td>
-              <td class="positive">+$5,000.00</td>
-              <td><span class="badge approved">Approved</span></td>
-            </tr>
-            <tr>
-              <td>Utility Bill</td>
-              <td>Facilities</td>
-              <td>Jun 28, 2025</td>
-              <td class="negative">-$210.00</td>
-              <td><span class="badge pending">Pending</span></td>
-            </tr>
-            <tr>
-              <td>Equipment Purchase</td>
-              <td>Operations</td>
-              <td>Jun 25, 2025</td>
-              <td class="negative">-$1,450.00</td>
-              <td><span class="badge pending">Pending</span></td>
-            </tr>
-            <tr>
-              <td>Monthly Grant</td>
-              <td>Income</td>
-              <td>Jun 20, 2025</td>
-              <td class="positive">+$3,200.00</td>
-              <td><span class="badge approved">Approved</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-    </div>
+        <!-- Table Section -->
+        <section class="table-section">
+          <div class="table-header">
+            <h3>Recent Transactions</h3>
+            <button class="btn-outline">View All Transactions</button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="desc-cell"><strong>Office Supplies</strong><span>Stationery and ink</span></div></td>
+                  <td>Operations</td>
+                  <td>Jul 1, 2025</td>
+                  <td><span class="amt-neg">-$320.00</span></td>
+                  <td><span class="badge approved">Approved</span></td>
+                </tr>
+                <tr>
+                  <td><div class="desc-cell"><strong>Donation</strong><span>Hope Fund</span></div></td>
+                  <td>Income</td>
+                  <td>Jun 30, 2025</td>
+                  <td><span class="amt-pos">+$5,000.00</span></td>
+                  <td><span class="badge approved">Approved</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../Scripts/supabase.js"></script>
-  <script src="../Scripts/guard.js"></script>
-  <script src="../Scripts/dashboard.js"></script>
+  <script>
+    // Initialize icons
+    lucide.createIcons();
+  </script>
 </body>
 </html>

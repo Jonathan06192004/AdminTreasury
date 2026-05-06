@@ -1,36 +1,69 @@
+.token-icon-wrap {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #0d3349, #2e6b8a);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 16px rgba(13, 51, 73, 0.2);
+}
+
+.token-icon-wrap svg {
+  width: 26px;
+  height: 26px;
+  stroke: #40f5c8;
+}
+
 .token-badge {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  margin: 0 auto 1.5rem;
-  padding: 0.35rem 1rem;
-  background: #eef2ff;
-  color: #4f46e5;
+  gap: 0.4rem;
+  padding: 0.35rem 0.9rem;
+  background: #e0f7f4;
+  color: #0d3349;
   border-radius: 20px;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  width: fit-content;
+  margin-bottom: 1.5rem;
+  border: 1.5px solid #b2e8e0;
 }
 
-.token-badge:empty {
-  display: none;
+.token-badge:empty { display: none; }
+
+.token-badge::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  background: #40f5c8;
+  border-radius: 50%;
+  display: inline-block;
 }
 
 .btn-back {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
   width: 100%;
-  margin-top: 0.75rem;
-  background: none;
-  border: none;
-  color: #888;
-  font-size: 0.85rem;
+  margin-top: 1rem;
+  padding: 0.7rem;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  color: #64748b;
+  font-size: 0.88rem;
+  font-weight: 600;
   cursor: pointer;
-  text-align: center;
-  transition: color 0.2s;
+  transition: all 0.2s;
+  font-family: inherit;
 }
 
 .btn-back:hover {
-  color: #4f46e5;
+  background: #f1f5f9;
+  border-color: #0d3349;
+  color: #0d3349;
 }
