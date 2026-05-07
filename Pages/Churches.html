@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Treasury | Tithes</title>
+  <title>Admin Treasury | Churches</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="../Styles/Dashboard.css" />
-  <link rel="stylesheet" href="../Styles/Tithes.css" />
+  <link rel="stylesheet" href="../Styles/Churches.css" />
 </head>
 <body>
   <div class="app">
@@ -24,9 +24,9 @@
       <nav class="sidebar-nav">
         <div class="nav-group">Main Menu</div>
         <a href="Dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>
-        <a href="Tithes.html" class="nav-item active"><i data-lucide="heart"></i> Tithes</a>
+        <a href="Tithes.html" class="nav-item"><i data-lucide="heart"></i> Tithes</a>
         <a href="Offerings.html" class="nav-item"><i data-lucide="hand-coins"></i> Offerings</a>
-        <a href="Churches.html" class="nav-item"><i data-lucide="church"></i> Churches</a>
+        <a href="Churches.html" class="nav-item active"><i data-lucide="church"></i> Churches</a>
         <a href="Districts.html" class="nav-item"><i data-lucide="map-pin"></i> Districts</a>
         <div class="nav-group">System</div>
         <a href="Settings.html" class="nav-item"><i data-lucide="settings"></i> Settings</a>
@@ -36,7 +36,7 @@
     <main class="main">
       <header class="topbar">
         <div class="page-title">
-          <h2>Tithes</h2>
+          <h2>Churches</h2>
           <p class="topbar-date" id="today-date"></p>
         </div>
         <div class="topbar-right">
@@ -56,33 +56,29 @@
         <div class="data-card">
           <div class="data-card-header">
             <div>
-              <h3 id="table-title">Tithes</h3>
+              <h3 id="table-title">Churches</h3>
               <p id="table-subtitle" class="subtitle"></p>
             </div>
             <div class="header-actions">
-              <select id="filter-church" class="filter-select">
-                <option value="">All Churches</option>
+              <select id="filter-district" class="filter-select">
+                <option value="">All Districts</option>
               </select>
-              <select id="filter-year" class="filter-select">
-                <option value="">All Years</option>
-              </select>
-              <button class="btn-add" id="btn-add">+ Add Entry</button>
+              <button class="btn-add" id="btn-add">+ Add Church</button>
             </div>
           </div>
 
           <table>
             <thead>
               <tr>
-                <th>Year</th>
-                <th>Month</th>
-                <th>Church</th>
-                <th>Amount</th>
-                <th>Budget</th>
+                <th>Name</th>
+                <th>District</th>
+                <th>Pastor</th>
+                <th>Location</th>
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody id="tithes-tbody">
-              <tr><td colspan="6" class="empty-row">Loading...</td></tr>
+            <tbody id="churches-tbody">
+              <tr><td colspan="5" class="empty-row">Loading...</td></tr>
             </tbody>
           </table>
         </div>
@@ -94,40 +90,28 @@
   <div class="modal-overlay" id="modal-overlay">
     <div class="modal">
       <div class="modal-header">
-        <h3 id="modal-title">Add Entry</h3>
+        <h3 id="modal-title">Add Church</h3>
         <button class="modal-close" id="modal-close">&times;</button>
       </div>
       <form id="entry-form">
         <input type="hidden" id="entry-id" />
         <div class="form-group">
-          <label for="entry-year">Year</label>
-          <input type="number" id="entry-year" placeholder="e.g. 2025" min="2000" max="2100" required />
-        </div>
-        <div class="form-group">
-          <label for="entry-month">Month</label>
-          <select id="entry-month" required>
-            <option value="">Select month</option>
-            <option value="1">January</option><option value="2">February</option>
-            <option value="3">March</option><option value="4">April</option>
-            <option value="5">May</option><option value="6">June</option>
-            <option value="7">July</option><option value="8">August</option>
-            <option value="9">September</option><option value="10">October</option>
-            <option value="11">November</option><option value="12">December</option>
+          <label for="entry-district">District</label>
+          <select id="entry-district" required>
+            <option value="">Select district</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="entry-church">Church</label>
-          <select id="entry-church" required>
-            <option value="">Select church</option>
-          </select>
+          <label for="entry-name">Church Name</label>
+          <input type="text" id="entry-name" placeholder="e.g. Central Church" required />
         </div>
         <div class="form-group">
-          <label for="entry-amount">Amount</label>
-          <input type="number" id="entry-amount" placeholder="0.00" step="0.01" min="0" required />
+          <label for="entry-pastor">Pastor Name</label>
+          <input type="text" id="entry-pastor" placeholder="e.g. Pastor John" />
         </div>
         <div class="form-group">
-          <label for="entry-budget">Budget</label>
-          <input type="number" id="entry-budget" placeholder="0.00" step="0.01" min="0" required />
+          <label for="entry-location">Location</label>
+          <input type="text" id="entry-location" placeholder="e.g. City, Province" />
         </div>
         <p id="modal-msg" class="modal-msg"></p>
         <div class="modal-actions">
@@ -145,7 +129,7 @@
         <h3>Confirm Delete</h3>
         <button class="modal-close" id="delete-close">&times;</button>
       </div>
-      <p style="margin-bottom:1.5rem;color:#64748b;font-size:0.9rem;">Are you sure you want to delete this entry? This cannot be undone.</p>
+      <p style="margin-bottom:1.5rem;color:#64748b;font-size:0.9rem;">Are you sure you want to delete this church? This cannot be undone.</p>
       <div class="modal-actions">
         <button class="btn-cancel" id="delete-cancel">Cancel</button>
         <button class="btn-danger" id="delete-confirm">Delete</button>
@@ -156,7 +140,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../Scripts/supabase.js"></script>
   <script src="../Scripts/guard.js"></script>
-  <script src="../Scripts/tithes.js"></script>
+  <script src="../Scripts/churches.js"></script>
   <script>lucide.createIcons();</script>
 </body>
 </html>
