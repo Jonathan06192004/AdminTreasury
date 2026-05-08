@@ -240,3 +240,7 @@ td { padding: 1.25rem 1.5rem; border-top: 1px solid #f1f5f9; }
 }
 .badge.approved { background: #dcfce7; color: #16a34a; }
 .badge.pending { background: #fef3c7; color: #d97706; }
+
+.badge.tithe    { background: #dcfce7; color: #16a34a; }
+.badge.offering { background: #e0f2fe; color: #0ea5e9; }
+.btn-outline { text-decoration: none; display: inline-block; }

@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="../Styles/Dashboard.css" />
 </head>
 <body>
@@ -34,6 +35,10 @@
         <div class="nav-group">System</div>
         <a href="Settings.html" class="nav-item"><i data-lucide="settings"></i> Settings</a>
       </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" id="logout-btn"><i data-lucide="log-out"></i> Logout</button>
+      </div>
 
     </aside>
 
@@ -63,35 +68,35 @@
         <!-- Stat Cards -->
         <section class="cards">
           <div class="card">
-            <div class="card-icon income"><i data-lucide="wallet"></i></div>
+            <div class="card-icon positive"><i data-lucide="heart"></i></div>
             <div class="card-details">
-              <p class="card-label">Total Balance</p>
-              <h3 class="card-value">$48,295.00</h3>
-              <span class="card-badge positive">↑ 2.4%</span>
+              <p class="card-label">Total Tithes</p>
+              <h3 class="card-value" id="stat-tithes">—</h3>
+              <span class="card-badge positive">This year</span>
             </div>
           </div>
           <div class="card">
-            <div class="card-icon positive"><i data-lucide="trending-up"></i></div>
+            <div class="card-icon income"><i data-lucide="hand-coins"></i></div>
             <div class="card-details">
-              <p class="card-label">Total Income</p>
-              <h3 class="card-value">$12,540.00</h3>
-              <span class="card-badge positive">↑ 5.1%</span>
+              <p class="card-label">Total Offerings</p>
+              <h3 class="card-value" id="stat-offerings">—</h3>
+              <span class="card-badge positive">This year</span>
             </div>
           </div>
           <div class="card">
-            <div class="card-icon negative"><i data-lucide="trending-down"></i></div>
+            <div class="card-icon neutral"><i data-lucide="church"></i></div>
             <div class="card-details">
-              <p class="card-label">Total Expenses</p>
-              <h3 class="card-value">$7,320.00</h3>
-              <span class="card-badge negative">↑ 1.8%</span>
+              <p class="card-label">Churches</p>
+              <h3 class="card-value" id="stat-churches">—</h3>
+              <span class="card-badge neutral">Registered</span>
             </div>
           </div>
           <div class="card">
-            <div class="card-icon neutral"><i data-lucide="clock"></i></div>
+            <div class="card-icon negative"><i data-lucide="map-pin"></i></div>
             <div class="card-details">
-              <p class="card-label">Pending</p>
-              <h3 class="card-value">6</h3>
-              <span class="card-badge neutral">Needs review</span>
+              <p class="card-label">Districts</p>
+              <h3 class="card-value" id="stat-districts">—</h3>
+              <span class="card-badge neutral">Registered</span>
             </div>
           </div>
         </section>
@@ -99,35 +104,25 @@
         <!-- Table Section -->
         <section class="table-section">
           <div class="table-header">
-            <h3>Recent Transactions</h3>
-            <button class="btn-outline">View All Transactions</button>
+            <h3>Recent Entries</h3>
+            <div style="display:flex;gap:0.5rem;">
+              <a href="Tithes.html" class="btn-outline">View Tithes</a>
+              <a href="Offerings.html" class="btn-outline">View Offerings</a>
+            </div>
           </div>
           <div class="table-container">
             <table>
               <thead>
                 <tr>
-                  <th>Description</th>
-                  <th>Category</th>
-                  <th>Date</th>
+                  <th>Church</th>
+                  <th>Type</th>
+                  <th>Month</th>
+                  <th>Year</th>
                   <th>Amount</th>
-                  <th>Status</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td><div class="desc-cell"><strong>Office Supplies</strong><span>Stationery and ink</span></div></td>
-                  <td>Operations</td>
-                  <td>Jul 1, 2025</td>
-                  <td><span class="amt-neg">-$320.00</span></td>
-                  <td><span class="badge approved">Approved</span></td>
-                </tr>
-                <tr>
-                  <td><div class="desc-cell"><strong>Donation</strong><span>Hope Fund</span></div></td>
-                  <td>Income</td>
-                  <td>Jun 30, 2025</td>
-                  <td><span class="amt-pos">+$5,000.00</span></td>
-                  <td><span class="badge approved">Approved</span></td>
-                </tr>
+              <tbody id="recent-tbody">
+                <tr><td colspan="5" style="text-align:center;padding:2rem;color:#64748b;">Loading...</td></tr>
               </tbody>
             </table>
           </div>
@@ -136,8 +131,10 @@
     </main>
   </div>
 
+  <script src="../Scripts/supabase.js"></script>
+  <script src="../Scripts/guard.js"></script>
+  <script src="../Scripts/dashboard.js"></script>
   <script>
-    // Initialize icons
     lucide.createIcons();
   </script>
 </body>
