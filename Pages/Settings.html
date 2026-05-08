@@ -25,6 +25,7 @@
       <nav class="sidebar-nav">
         <div class="nav-group">Main Menu</div>
         <a href="Dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+        <a href="Users.html" class="nav-item"><i data-lucide="users"></i> Users</a>
         <a href="Tithes.html" class="nav-item"><i data-lucide="heart"></i> Tithes</a>
         <a href="Offerings.html" class="nav-item"><i data-lucide="hand-coins"></i> Offerings</a>
         <a href="Churches.html" class="nav-item"><i data-lucide="church"></i> Churches</a>
@@ -51,16 +52,6 @@
             </div>
             <div class="avatar" id="user-avatar"></div>
           </div>
-          <div class="settings-menu-wrap">
-            <button class="settings-burger" id="settings-burger" aria-label="Menu">
-              <i data-lucide="menu"></i>
-            </button>
-            <div class="settings-dropdown" id="settings-dropdown">
-              <button class="dropdown-logout" id="logout-btn">
-                <i data-lucide="log-out"></i> Logout
-              </button>
-            </div>
-          </div>
         </div>
       </header>
 
@@ -76,6 +67,15 @@
             <div class="header-text">
               <h3>Profile Information</h3>
               <p>View your account details</p>
+            </div>
+            <div class="settings-menu-wrap" style="margin-left:auto;">
+              <button class="settings-burger" id="settings-burger" aria-label="Options">
+                <i data-lucide="more-vertical"></i>
+              </button>
+              <div class="settings-dropdown" id="settings-dropdown">
+                <button class="theme-btn" id="theme-toggle"><i data-lucide="moon"></i> Dark Mode</button>
+                <button class="dropdown-logout" id="logout-btn"><i data-lucide="log-out"></i> Logout</button>
+              </div>
             </div>
           </div>
           <div class="profile-grid">
@@ -170,6 +170,7 @@
   <script src="../Scripts/supabase.js"></script>
   <script src="../Scripts/guard.js"></script>
   <script src="../Scripts/settings.js"></script>
+  <script src="../Scripts/theme.js"></script>
   <script>
     lucide.createIcons();
     const burger = document.getElementById('settings-burger');

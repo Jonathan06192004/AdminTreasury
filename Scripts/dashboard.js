@@ -8,15 +8,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   const isSuperAdmin = user.role === 'superadmin';
   const currentYear = new Date().getFullYear();
 
-  // Get accessible mission IDs
-  let missionQuery = dbData.from('missions').select('id, code');
+  let missionQuery = dbData.from('missions').select('id, code, name');
   if (!isSuperAdmin) missionQuery = missionQuery.eq('code', user.mission_code);
   const { data: missions } = await missionQuery;
   if (!missions || missions.length === 0) return;
 
   const missionIds = missions.map(m => m.id);
+  const missionMap = {};
+  missions.forEach(m => { missionMap[m.code] = m.name; });
 
-  // Get all church IDs under those missions
   const { data: churchData } = await dbData
     .from('churches')
     .select('id, name, districts!inner(mission_id)')
@@ -28,22 +28,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (churchIds.length === 0) {
     setStats(0, 0, 0, 0);
     renderRecent([]);
+    renderUsers([], missionMap);
     return;
   }
 
-  // Fetch stats in parallel
   const [tithesRes, offeringsRes, districtsRes] = await Promise.all([
     dbData.from('tithes').select('amount').in('church_id', churchIds).eq('year', currentYear),
     dbData.from('offerings').select('amount').in('church_id', churchIds).eq('year', currentYear),
     dbData.from('districts').select('id').in('mission_id', missionIds)
   ]);
 
-  const totalTithes   = (tithesRes.data || []).reduce((s, r) => s + (r.amount || 0), 0);
+  const totalTithes    = (tithesRes.data || []).reduce((s, r) => s + (r.amount || 0), 0);
   const totalOfferings = (offeringsRes.data || []).reduce((s, r) => s + (r.amount || 0), 0);
-
   setStats(totalTithes, totalOfferings, churches.length, (districtsRes.data || []).length);
 
-  // Fetch recent entries (last 5 tithes + last 5 offerings)
   const [recentTithes, recentOfferings] = await Promise.all([
     dbData.from('tithes').select('*, churches(name)').in('church_id', churchIds)
       .order('year', { ascending: false }).order('month', { ascending: false }).limit(5),
@@ -54,9 +52,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   const combined = [
     ...(recentTithes.data || []).map(r => ({ ...r, type: 'Tithe' })),
     ...(recentOfferings.data || []).map(r => ({ ...r, type: 'Offering' }))
-  ].sort((a, b) => b.year - a.year || b.month - a.month).slice(0, 10);
+  ].sort((a, b) => b.year - a.year || b.month - a.month).slice(0, 8);
 
   renderRecent(combined);
+
+  // Fetch viewer users
+  const missionCodes = missions.map(m => m.code);
+  const { data: usersData } = await db
+    .from('users')
+    .select('full_name, username, mission_code, is_active')
+    .in('mission_code', missionCodes)
+    .eq('role', 'viewer')
+    .order('mission_code')
+    .order('full_name');
+
+  renderUsers(usersData || [], missionMap);
 });
 
 function setStats(tithes, offerings, churchCount, districtCount) {
@@ -73,7 +83,7 @@ function fmt(val) {
 function renderRecent(rows) {
   const tbody = document.getElementById('recent-tbody');
   if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:#64748b;">No entries found.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" class="dash-loading">No entries found.</td></tr>';
     return;
   }
   tbody.innerHTML = rows.map(r => `
@@ -83,6 +93,31 @@ function renderRecent(rows) {
       <td>${MONTHS[r.month]}</td>
       <td>${r.year}</td>
       <td class="amt-pos">${fmt(r.amount)}</td>
+    </tr>
+  `).join('');
+}
+
+function renderUsers(rows, missionMap) {
+  const tbody = document.getElementById('users-tbody');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="4" class="dash-loading">No viewer accounts found.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td>
+        <span class="mission-tag">${r.mission_code || '—'}</span>
+      </td>
+      <td>
+        <div class="dash-user-cell">
+          <div class="dash-avatar">${r.full_name.charAt(0).toUpperCase()}</div>
+          <span>${r.full_name}</span>
+        </div>
+      </td>
+      <td><code class="dash-code">${r.username}</code></td>
+      <td><span class="dash-status ${r.is_active ? 'active' : 'inactive'}">${
+        r.is_active ? 'Active' : 'Inactive'
+      }</span></td>
     </tr>
   `).join('');
 }

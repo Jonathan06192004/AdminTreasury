@@ -28,6 +28,7 @@
       <nav class="sidebar-nav">
         <div class="nav-group">Main Menu</div>
         <a href="Dashboard.html" class="nav-item active"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+        <a href="Users.html" class="nav-item"><i data-lucide="users"></i> Users</a>
         <a href="Tithes.html" class="nav-item"><i data-lucide="heart"></i> Tithes</a>
         <a href="Offerings.html" class="nav-item"><i data-lucide="hand-coins"></i> Offerings</a>
         <a href="Churches.html" class="nav-item"><i data-lucide="church"></i> Churches</a>
@@ -101,16 +102,21 @@
           </div>
         </section>
 
-        <!-- Table Section -->
-        <section class="table-section">
-          <div class="table-header">
-            <h3>Recent Entries</h3>
-            <div style="display:flex;gap:0.5rem;">
-              <a href="Tithes.html" class="btn-outline">View Tithes</a>
-              <a href="Offerings.html" class="btn-outline">View Offerings</a>
+        <!-- Bottom two-column section -->
+        <div class="dash-bottom">
+
+          <!-- Recent Entries -->
+          <section class="table-section">
+            <div class="table-header">
+              <div>
+                <h3>Recent Entries</h3>
+                <p class="table-sub">Latest tithes &amp; offerings</p>
+              </div>
+              <div style="display:flex;gap:0.5rem;">
+                <a href="Tithes.html" class="btn-outline">Tithes</a>
+                <a href="Offerings.html" class="btn-outline">Offerings</a>
+              </div>
             </div>
-          </div>
-          <div class="table-container">
             <table>
               <thead>
                 <tr>
@@ -122,11 +128,36 @@
                 </tr>
               </thead>
               <tbody id="recent-tbody">
-                <tr><td colspan="5" style="text-align:center;padding:2rem;color:#64748b;">Loading...</td></tr>
+                <tr><td colspan="5" class="dash-loading">Loading...</td></tr>
               </tbody>
             </table>
-          </div>
-        </section>
+          </section>
+
+          <!-- Users per Mission -->
+          <section class="table-section">
+            <div class="table-header">
+              <div>
+                <h3>Viewer Accounts</h3>
+                <p class="table-sub">Users per mission</p>
+              </div>
+              <a href="Users.html" class="btn-outline">Manage</a>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Mission</th>
+                  <th>Full Name</th>
+                  <th>Username</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="users-tbody">
+                <tr><td colspan="4" class="dash-loading">Loading...</td></tr>
+              </tbody>
+            </table>
+          </section>
+
+        </div>
       </div>
     </main>
   </div>
@@ -134,6 +165,7 @@
   <script src="../Scripts/supabase.js"></script>
   <script src="../Scripts/guard.js"></script>
   <script src="../Scripts/dashboard.js"></script>
+  <script src="../Scripts/theme.js"></script>
   <script>
     lucide.createIcons();
   </script>

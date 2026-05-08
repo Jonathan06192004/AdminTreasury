@@ -3,10 +3,13 @@ let activeMissionId = null;
 let allRows = [];
 let deleteTargetId = null;
 
+const STORAGE_BUCKET = 'district-photos';
+
 document.addEventListener('DOMContentLoaded', async () => {
   await loadMissions();
   setupModal();
   setupDeleteModal();
+  setupPhotoPreview();
 });
 
 async function loadMissions() {
@@ -17,7 +20,7 @@ async function loadMissions() {
   const { data, error } = await query;
   if (error || !data || data.length === 0) {
     document.getElementById('districts-tbody').innerHTML =
-      '<tr><td colspan="4" class="empty-row">No missions found for your account.</td></tr>';
+      '<tr><td colspan="7" class="empty-row">No missions found for your account.</td></tr>';
     return;
   }
 
@@ -51,7 +54,7 @@ function selectMission(mission) {
 
 async function loadData() {
   document.getElementById('districts-tbody').innerHTML =
-    '<tr><td colspan="4" class="empty-row">Loading...</td></tr>';
+    '<tr><td colspan="7" class="empty-row">Loading...</td></tr>';
 
   const { data, error } = await dbData
     .from('districts')
@@ -61,7 +64,7 @@ async function loadData() {
 
   if (error) {
     document.getElementById('districts-tbody').innerHTML =
-      '<tr><td colspan="4" class="empty-row">Failed to load data.</td></tr>';
+      '<tr><td colspan="7" class="empty-row">Failed to load data.</td></tr>';
     return;
   }
 
@@ -72,20 +75,53 @@ async function loadData() {
 function renderTable(rows) {
   const tbody = document.getElementById('districts-tbody');
   if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="4" class="empty-row">No districts found.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="empty-row">No districts found.</td></tr>';
     return;
   }
-  tbody.innerHTML = rows.map(r => `
+  tbody.innerHTML = rows.map(r => {
+    const lat = r.latitude != null ? r.latitude : null;
+    const lng = r.longitude != null ? r.longitude : null;
+    const photo = r.profile_photo_url || '';
+    return `
     <tr>
+      <td>
+        ${photo
+          ? `<img src="${photo}" class="district-avatar" alt="${r.name}" />`
+          : `<div class="district-avatar-placeholder">${r.name.charAt(0).toUpperCase()}</div>`
+        }
+      </td>
       <td>${r.name}</td>
       <td>${r.leader_name || '—'}</td>
-      <td>${r.location || '—'}</td>
+      <td>${r.contact || '—'}</td>
+      <td>${r.address || '—'}</td>
+      <td>${lat !== null ? lat : '—'} / ${lng !== null ? lng : '—'}</td>
       <td class="td-actions">
-        <button class="btn-edit" onclick="openEdit(${r.id}, ${JSON.stringify(r.name)}, ${JSON.stringify(r.leader_name || '')}, ${JSON.stringify(r.location || '')})">Edit</button>
+        <button class="btn-edit" onclick="openEditById(${r.id})">Edit</button>
         <button class="btn-delete" onclick="openDelete(${r.id})">Delete</button>
       </td>
     </tr>
-  `).join('');
+  `;
+  }).join('');
+}
+
+function openEditById(id) {
+  const r = allRows.find(row => row.id === id);
+  if (!r) return;
+  openEdit(r.id, r.name, r.leader_name || '', r.contact || '', r.address || '', r.latitude, r.longitude, r.profile_photo_url || '');
+}
+
+function setupPhotoPreview() {
+  document.getElementById('entry-photo').addEventListener('change', function () {
+    const file = this.files[0];
+    const preview = document.getElementById('photo-preview');
+    const placeholder = document.getElementById('photo-placeholder');
+    if (file) {
+      const url = URL.createObjectURL(file);
+      preview.src = url;
+      preview.style.display = 'block';
+      placeholder.style.display = 'none';
+    }
+  });
 }
 
 function setupModal() {
@@ -98,21 +134,48 @@ function setupModal() {
 function openAdd() {
   document.getElementById('modal-title').textContent = 'Add District';
   document.getElementById('entry-id').value = '';
+  document.getElementById('entry-current-photo').value = '';
   document.getElementById('entry-form').reset();
+  resetPhotoPreview();
   document.getElementById('modal-msg').textContent = '';
   document.getElementById('modal-msg').className = 'modal-msg';
   document.getElementById('modal-overlay').classList.add('open');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
-function openEdit(id, name, leader, location) {
+function openEdit(id, name, leader, contact, address, lat, lng, photoUrl) {
   document.getElementById('modal-title').textContent = 'Edit District';
   document.getElementById('entry-id').value = id;
   document.getElementById('entry-name').value = name;
   document.getElementById('entry-leader').value = leader;
-  document.getElementById('entry-location').value = location;
+  document.getElementById('entry-contact').value = contact;
+  document.getElementById('entry-address').value = address;
+  document.getElementById('entry-latitude').value = lat != null ? lat : '';
+  document.getElementById('entry-longitude').value = lng != null ? lng : '';
+  document.getElementById('entry-current-photo').value = photoUrl;
+
+  const preview = document.getElementById('photo-preview');
+  const placeholder = document.getElementById('photo-placeholder');
+  if (photoUrl) {
+    preview.src = photoUrl;
+    preview.style.display = 'block';
+    placeholder.style.display = 'none';
+  } else {
+    resetPhotoPreview();
+  }
+
   document.getElementById('modal-msg').textContent = '';
   document.getElementById('modal-msg').className = 'modal-msg';
   document.getElementById('modal-overlay').classList.add('open');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function resetPhotoPreview() {
+  const preview = document.getElementById('photo-preview');
+  const placeholder = document.getElementById('photo-placeholder');
+  preview.src = '';
+  preview.style.display = 'none';
+  placeholder.style.display = 'flex';
 }
 
 function closeModal() {
@@ -125,20 +188,49 @@ async function handleSubmit(e) {
   msgEl.className = 'modal-msg';
   msgEl.textContent = '';
 
-  const id       = document.getElementById('entry-id').value;
-  const name     = document.getElementById('entry-name').value.trim();
-  const leader   = document.getElementById('entry-leader').value.trim() || null;
-  const location = document.getElementById('entry-location').value.trim() || null;
-  const btn      = document.getElementById('btn-submit');
+  const id          = document.getElementById('entry-id').value;
+  const name        = document.getElementById('entry-name').value.trim();
+  const leader      = document.getElementById('entry-leader').value.trim() || null;
+  const contact    = document.getElementById('entry-contact').value.trim() || null;
+  const address     = document.getElementById('entry-address').value.trim() || null;
+  const latVal      = document.getElementById('entry-latitude').value.trim();
+  const lngVal      = document.getElementById('entry-longitude').value.trim();
+  const latitude    = latVal !== '' ? parseFloat(latVal) : null;
+  const longitude   = lngVal !== '' ? parseFloat(lngVal) : null;
+  const photoFile   = document.getElementById('entry-photo').files[0];
+  const currentPhoto = document.getElementById('entry-current-photo').value;
+  const btn         = document.getElementById('btn-submit');
 
   btn.disabled = true;
   btn.textContent = 'Saving...';
 
+  let profile_photo_url = currentPhoto || null;
+
+  if (photoFile) {
+    const ext = photoFile.name.split('.').pop();
+    const filePath = `district-${Date.now()}.${ext}`;
+    const { error: uploadError } = await dbData.storage
+      .from(STORAGE_BUCKET)
+      .upload(filePath, photoFile, { upsert: true });
+
+    if (uploadError) {
+      msgEl.textContent = 'Photo upload failed. ' + uploadError.message;
+      msgEl.classList.add('error');
+      btn.disabled = false;
+      btn.textContent = 'Save';
+      return;
+    }
+
+    const { data: urlData } = dbData.storage.from(STORAGE_BUCKET).getPublicUrl(filePath);
+    profile_photo_url = urlData.publicUrl;
+  }
+
+  const payload = { name, leader_name: leader, contact, address, latitude, longitude, profile_photo_url };
   let error;
   if (id) {
-    ({ error } = await dbData.from('districts').update({ name, leader_name: leader, location }).eq('id', id));
+    ({ error } = await dbData.from('districts').update(payload).eq('id', id));
   } else {
-    ({ error } = await dbData.from('districts').insert({ mission_id: activeMissionId, name, leader_name: leader, location }));
+    ({ error } = await dbData.from('districts').insert({ mission_id: activeMissionId, ...payload }));
   }
 
   btn.disabled = false;
