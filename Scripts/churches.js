@@ -106,14 +106,13 @@ function populateDistrictFilter(distList) {
 function renderTable(rows) {
   const tbody = document.getElementById('churches-tbody');
   if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="6" class="empty-row">No churches found.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-row">No churches found.</td></tr>';
     return;
   }
   tbody.innerHTML = rows.map(r => `
     <tr>
       <td>${r.name}</td>
       <td>${r.districts?.name || '—'}</td>
-      <td>${r.pastor_name || '—'}</td>
       <td>${r.address || '—'}</td>
       <td>${r.latitude != null ? r.latitude : '—'} / ${r.longitude != null ? r.longitude : '—'}</td>
       <td class="td-actions">
@@ -127,7 +126,7 @@ function renderTable(rows) {
 function openEditById(id) {
   const r = allRows.find(row => row.id === id);
   if (!r) return;
-  openEdit(r.id, r.district_id, r.name, r.pastor_name || '', r.address || '', r.latitude, r.longitude);
+  openEdit(r.id, r.district_id, r.name, r.address || '', r.latitude, r.longitude);
 }
 
 function populateDistrictSelect(selectedId) {
@@ -159,12 +158,11 @@ function openAdd() {
   document.getElementById('modal-overlay').classList.add('open');
 }
 
-function openEdit(id, districtId, name, pastor, address, lat, lng) {
+function openEdit(id, districtId, name, address, lat, lng) {
   document.getElementById('modal-title').textContent = 'Edit Church';
   document.getElementById('entry-id').value = id;
   populateDistrictSelect(districtId);
   document.getElementById('entry-name').value = name;
-  document.getElementById('entry-pastor').value = pastor;
   document.getElementById('entry-address').value = address;
   document.getElementById('entry-latitude').value = lat != null ? lat : '';
   document.getElementById('entry-longitude').value = lng != null ? lng : '';
@@ -186,7 +184,6 @@ async function handleSubmit(e) {
   const id         = document.getElementById('entry-id').value;
   const districtId = parseInt(document.getElementById('entry-district').value);
   const name       = document.getElementById('entry-name').value.trim();
-  const pastor     = document.getElementById('entry-pastor').value.trim() || null;
   const address    = document.getElementById('entry-address').value.trim() || null;
   const latVal     = document.getElementById('entry-latitude').value.trim();
   const lngVal     = document.getElementById('entry-longitude').value.trim();
@@ -199,9 +196,9 @@ async function handleSubmit(e) {
 
   let error;
   if (id) {
-    ({ error } = await dbData.from('churches').update({ district_id: districtId, name, pastor_name: pastor, address, latitude, longitude }).eq('id', id));
+    ({ error } = await dbData.from('churches').update({ district_id: districtId, name, address, latitude, longitude }).eq('id', id));
   } else {
-    ({ error } = await dbData.from('churches').insert({ district_id: districtId, name, pastor_name: pastor, address, latitude, longitude }));
+    ({ error } = await dbData.from('churches').insert({ district_id: districtId, name, address, latitude, longitude }));
   }
 
   btn.disabled = false;

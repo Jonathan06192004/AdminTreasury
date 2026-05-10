@@ -148,6 +148,58 @@
           </form>
         </div>
 
+        <!-- Two-Factor Authentication -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div class="card-icon-wrap">
+              <i data-lucide="shield-check" width="20" height="20"></i>
+            </div>
+            <div class="header-text">
+              <h3>Two-Factor Authentication</h3>
+              <p>Add an extra layer of security to your account</p>
+            </div>
+          </div>
+
+          <div class="tfa-status-row">
+            <div class="tfa-status-info">
+              <span class="tfa-dot" id="tfa-dot"></span>
+              <span class="tfa-status-label" id="tfa-status-label">Loading...</span>
+            </div>
+            <div class="tfa-actions" id="tfa-actions"></div>
+          </div>
+
+          <!-- QR / Setup Panel -->
+          <div class="tfa-setup-panel" id="tfa-setup-panel">
+            <p class="tfa-setup-hint">Scan this QR code with your authenticator app, then enter the 6-digit code to confirm.</p>
+            <div class="tfa-qr-wrap">
+              <img id="tfa-qr-img" src="" alt="QR Code" />
+            </div>
+            <div class="tfa-secret-row">
+              <span class="tfa-secret-label">Manual key:</span>
+              <code id="tfa-secret-text"></code>
+            </div>
+            <p id="tfa-setup-msg" class="settings-msg"></p>
+            <div class="tfa-confirm-row">
+              <input type="text" id="tfa-confirm-input" placeholder="Enter 6-digit code" maxlength="6" inputmode="numeric" />
+              <button class="btn-save" id="btn-tfa-confirm">Confirm &amp; Enable</button>
+              <button class="btn-tfa-cancel" id="btn-tfa-cancel">Cancel</button>
+            </div>
+          </div>
+
+          <!-- View QR Panel -->
+          <div class="tfa-setup-panel" id="tfa-view-panel">
+            <p class="tfa-setup-hint">Use this QR code to re-add your account to a new authenticator app.</p>
+            <div class="tfa-qr-wrap">
+              <img id="tfa-view-qr-img" src="" alt="QR Code" />
+            </div>
+            <div class="tfa-secret-row">
+              <span class="tfa-secret-label">Manual key:</span>
+              <code id="tfa-view-secret-text"></code>
+            </div>
+            <button class="btn-tfa-cancel" id="btn-view-close" style="margin-top:1rem;">Close</button>
+          </div>
+        </div>
+
         <!-- Danger Zone -->
         <div class="settings-card danger-zone">
           <div class="settings-card-header">
@@ -166,9 +218,28 @@
     </main>
   </div>
 
+  <!-- Disable 2FA Confirm Modal -->
+  <div class="modal-overlay" id="disable-tfa-overlay">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h3>Disable Two-Factor Auth</h3>
+        <button class="modal-close" id="disable-tfa-close">&times;</button>
+      </div>
+      <div class="disable-tfa-warning">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <p>Disabling 2FA will remove the extra security layer from your account. You will only need your password to log in.</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="disable-tfa-cancel">Cancel</button>
+        <button class="btn-danger" id="disable-tfa-confirm">Disable 2FA</button>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../Scripts/supabase.js"></script>
   <script src="../Scripts/guard.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/otpauth@9.3.6/dist/otpauth.umd.min.js"></script>
   <script src="../Scripts/settings.js"></script>
   <script src="../Scripts/theme.js"></script>
   <script>

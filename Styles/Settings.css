@@ -321,3 +321,278 @@ html.dark .input-wrapper input:focus {
   background: #0f172a;
 }
 html.dark .form-group label { color: #94a3b8; }
+
+/* ── 2FA Status Row ── */
+.tfa-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.tfa-status-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.tfa-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tfa-dot.enabled  { background: #16a34a; box-shadow: 0 0 0 3px #dcfce7; }
+.tfa-dot.disabled { background: #94a3b8; box-shadow: 0 0 0 3px #f1f5f9; }
+
+.tfa-status-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.tfa-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.btn-tfa-secondary {
+  padding: 0.55rem 1.1rem;
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1.5px solid #bbf7d0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+
+.btn-tfa-secondary:hover { background: #dcfce7; }
+
+.btn-sm {
+  padding: 0.55rem 1.1rem;
+  font-size: 0.85rem;
+}
+
+/* ── 2FA Setup / View Panel ── */
+.tfa-setup-panel {
+  display: none;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.tfa-setup-hint {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.tfa-qr-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.tfa-qr-wrap img {
+  width: 200px;
+  height: 200px;
+  border-radius: 12px;
+  background: #fff;
+  padding: 10px;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.tfa-secret-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.tfa-secret-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.tfa-secret-row code {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0d3349;
+  letter-spacing: 0.1em;
+  word-break: break-all;
+}
+
+.tfa-confirm-row {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.tfa-confirm-row input {
+  flex: 1;
+  min-width: 120px;
+  padding: 0.65rem 0.9rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-align: center;
+  outline: none;
+  color: #0d3349;
+  background: #f8fafc;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.tfa-confirm-row input:focus { border-color: #0d3349; background: #fff; }
+
+.btn-tfa-cancel {
+  padding: 0.6rem 1.1rem;
+  background: #f1f5f9;
+  color: #64748b;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+
+.btn-tfa-cancel:hover { background: #e2e8f0; }
+
+/* ── Disable 2FA Modal ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(13,51,73,0.5);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+.modal-sm { max-width: 400px; }
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.modal-header h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0d3349;
+}
+
+.modal-close {
+  background: #f1f5f9;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #64748b;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.modal-close:hover { background: #e2e8f0; color: #1e293b; }
+
+.disable-tfa-warning {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  background: #fff7ed;
+  border: 1.5px solid #fed7aa;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.disable-tfa-warning svg {
+  stroke: #ea580c;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.disable-tfa-warning p {
+  font-size: 0.875rem;
+  color: #9a3412;
+  line-height: 1.55;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.btn-cancel {
+  padding: 0.6rem 1.25rem;
+  background: #f1f5f9;
+  color: #64748b;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+
+.btn-cancel:hover { background: #e2e8f0; }
+
+/* ── Dark mode 2FA ── */
+html.dark .tfa-status-label { color: #e2e8f0; }
+html.dark .tfa-dot.disabled { background: #475569; box-shadow: 0 0 0 3px #1e293b; }
+html.dark .tfa-setup-panel  { border-top-color: #334155; }
+html.dark .tfa-setup-hint   { color: #94a3b8; }
+html.dark .tfa-secret-row   { background: #0f172a; border-color: #334155; }
+html.dark .tfa-secret-row code { color: #40f5c8; }
+html.dark .tfa-confirm-row input { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+html.dark .tfa-confirm-row input:focus { border-color: #40f5c8; }
+html.dark .tfa-qr-wrap img  { border-color: #334155; }
+html.dark .modal            { background: #1e293b; }
+html.dark .modal-header     { border-bottom-color: #334155; }
+html.dark .modal-header h3  { color: #e2e8f0; }
+html.dark .modal-close      { background: #334155; color: #94a3b8; }
+html.dark .disable-tfa-warning { background: #1c1008; border-color: #7c2d12; }
+html.dark .disable-tfa-warning p { color: #fdba74; }

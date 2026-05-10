@@ -1,0 +1,51 @@
+.tfa-icon-wrap {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #0d3349, #1e4a63);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 8px 24px rgba(13,51,73,0.25);
+}
+
+.tfa-icon-wrap svg {
+  width: 30px;
+  height: 30px;
+  stroke: #40f5c8;
+}
+
+.tfa-badge {
+  display: inline-block;
+  background: #e0f7f4;
+  color: #0d3349;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.03em;
+}
+
+#tfa-input {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  padding: 0.75rem 1rem;
+}
+
+.btn-back {
+  display: block;
+  margin: 1.25rem auto 0;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 0.88rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.2s;
+}
+
+.btn-back:hover { color: #0d3349; }

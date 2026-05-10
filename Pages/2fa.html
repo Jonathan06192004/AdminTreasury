@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Treasury | Two-Factor Auth</title>
+  <link rel="stylesheet" href="../Styles/index.css" />
+  <link rel="stylesheet" href="../Styles/2fa.css" />
+</head>
+<body>
+  <div class="login-wrapper">
+
+    <div class="login-panel-left">
+      <div class="brand-block">
+        <div class="brand-logo-box">AT</div>
+        <h1>AdminTreasury</h1>
+        <p>Two-factor authentication<br>keeps your account secure</p>
+        <div class="brand-divider"></div>
+        <ul class="brand-features">
+          <li>TOTP-based verification</li>
+          <li>Works with Google Authenticator</li>
+          <li>Works with Microsoft Authenticator</li>
+          <li>30-second rotating codes</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="login-panel-right">
+      <div class="login-card">
+
+        <div class="tfa-icon-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+
+        <div class="login-header">
+          <h2>Verify Your Identity</h2>
+          <p>Enter the 6-digit code from your authenticator app</p>
+        </div>
+
+        <div class="tfa-badge" id="tfa-badge"></div>
+
+        <form class="login-form" id="tfa-form">
+          <p id="tfa-error" class="error-msg"></p>
+          <div class="form-group">
+            <label for="tfa-input">Authentication Code</label>
+            <input type="text" id="tfa-input" placeholder="000000" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" autocomplete="one-time-code" required />
+          </div>
+          <button type="submit" class="btn-login" id="btn-verify">Verify</button>
+        </form>
+
+        <button class="btn-back" id="btn-back">&#8592; Back to Login</button>
+      </div>
+    </div>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/otpauth@9.3.6/dist/otpauth.umd.min.js"></script>
+  <script src="../Scripts/supabase.js"></script>
+  <script src="../Scripts/2fa.js"></script>
+</body>
+</html>
