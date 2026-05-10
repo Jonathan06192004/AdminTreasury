@@ -16,6 +16,70 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
+  // ── Edit Profile (username + full name) ────────────────
+  const profileForm    = document.getElementById('edit-profile-form');
+  const profileMsg     = document.getElementById('profile-msg');
+  const btnSaveProfile = document.getElementById('btn-save-profile');
+
+  document.getElementById('edit-fullname').value = user.full_name || '';
+  document.getElementById('edit-username').value  = user.username  || '';
+
+  profileForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    profileMsg.className  = 'settings-msg';
+    profileMsg.textContent = '';
+
+    const fullName   = document.getElementById('edit-fullname').value.trim();
+    const newUsername = document.getElementById('edit-username').value.trim();
+
+    if (!fullName || !newUsername) {
+      profileMsg.textContent = 'Both fields are required.';
+      profileMsg.classList.add('error');
+      return;
+    }
+
+    btnSaveProfile.disabled    = true;
+    btnSaveProfile.textContent = 'Saving...';
+
+    // Check username uniqueness (skip if unchanged)
+    if (newUsername !== user.username) {
+      const { data: existing } = await db
+        .from('users').select('id').eq('username', newUsername).single();
+      if (existing) {
+        profileMsg.textContent = 'Username is already taken.';
+        profileMsg.classList.add('error');
+        btnSaveProfile.disabled    = false;
+        btnSaveProfile.textContent = 'Save Changes';
+        return;
+      }
+    }
+
+    const { error } = await db
+      .from('users')
+      .update({ full_name: fullName, username: newUsername, updated_at: new Date().toISOString() })
+      .eq('id', user.id);
+
+    btnSaveProfile.disabled    = false;
+    btnSaveProfile.textContent = 'Save Changes';
+
+    if (error) {
+      profileMsg.textContent = 'Failed to update profile. Try again.';
+      profileMsg.classList.add('error');
+      return;
+    }
+
+    user.full_name = fullName;
+    user.username  = newUsername;
+    localStorage.setItem('auth_user', JSON.stringify(user));
+
+    document.getElementById('profile-name').textContent     = fullName;
+    document.getElementById('profile-username').textContent = newUsername;
+    document.getElementById('user-name').textContent        = fullName;
+
+    profileMsg.textContent = 'Profile updated successfully!';
+    profileMsg.classList.add('success');
+  });
+
   // ── Change Password ──────────────────────────────────────
   const pwForm  = document.getElementById('change-password-form');
   const pwMsg   = document.getElementById('pw-msg');
