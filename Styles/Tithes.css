@@ -86,6 +86,20 @@
   border-color: #0d3349;
 }
 
+.btn-export-csv {
+  padding: 0.55rem 1.1rem;
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1.5px solid #bbf7d0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-export-csv:hover { background: #dcfce7; }
+
 .btn-add {
   padding: 0.55rem 1.25rem;
   background: var(--sidebar-bg, #0d3349);

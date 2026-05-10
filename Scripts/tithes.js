@@ -8,6 +8,7 @@ let allRows = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadMissions();
+  setupExport();
   setupModal();
   setupDeleteModal();
 });
@@ -164,6 +165,29 @@ function populateChurchSelect(selectedId) {
     opt.textContent = c.name;
     if (c.id === selectedId) opt.selected = true;
     sel.appendChild(opt);
+  });
+}
+
+function setupExport() {
+  document.getElementById('btn-export-csv').addEventListener('click', () => {
+    const yr = document.getElementById('filter-year').value;
+    const ch = document.getElementById('filter-church').value;
+    let rows = allRows;
+    if (yr) rows = rows.filter(r => String(r.year) === yr);
+    if (ch) rows = rows.filter(r => String(r.church_id) === ch);
+
+    const title = document.getElementById('table-title').textContent;
+    const header = 'Year,Month,Church,Amount,Budget';
+    const csvRows = rows.map(r =>
+      `${r.year},${MONTHS[r.month]},"${(r.churches?.name || '').replace(/"/g, '""')}",${r.amount},${r.budget}`
+    );
+    const csv = [header, ...csvRows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${title.replace(/\s+/g, '_')}.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
   });
 }
 
