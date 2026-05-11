@@ -288,8 +288,7 @@ async function handleSubmit(e) {
       username,
       role,
       is_active: isActive,
-      plain_password: password,
-      token: crypto.randomUUID()
+      plain_password: password
     });
 
     if (usersError) {
