@@ -223,6 +223,9 @@ async function handleSubmit(e) {
 
     const { data: urlData } = dbData.storage.from(STORAGE_BUCKET).getPublicUrl(filePath);
     profile_photo_url = urlData.publicUrl;
+
+    // Delete old photo from storage now that new one is uploaded
+    if (currentPhoto) await deleteStoragePhoto(currentPhoto, STORAGE_BUCKET);
   }
 
   const payload = { name, leader_name: leader, contact, address, latitude, longitude, profile_photo_url };
@@ -264,7 +267,15 @@ function closeDelete() {
 
 async function confirmDelete() {
   if (!deleteTargetId) return;
+  const row = allRows.find(r => r.id === deleteTargetId);
   const { error } = await dbData.from('districts').delete().eq('id', deleteTargetId);
+  if (!error && row?.profile_photo_url) await deleteStoragePhoto(row.profile_photo_url, STORAGE_BUCKET);
   closeDelete();
   if (!error) loadData();
+}
+
+function deleteStoragePhoto(url, bucket) {
+  const base = dbData.storage.from(bucket).getPublicUrl('').data.publicUrl.replace(/\/$/, '');
+  const filePath = url.replace(base + '/', '');
+  return dbData.storage.from(bucket).remove([filePath]);
 }

@@ -75,6 +75,7 @@
           <table>
             <thead>
               <tr>
+                <th>Photo</th>
                 <th>Name</th>
                 <th>District</th>
                 <th>Address</th>
@@ -83,7 +84,7 @@
               </tr>
             </thead>
             <tbody id="churches-tbody">
-              <tr><td colspan="5" class="empty-row">Loading...</td></tr>
+              <tr><td colspan="6" class="empty-row">Loading...</td></tr>
             </tbody>
           </table>
         </div>
@@ -100,6 +101,18 @@
       </div>
       <form id="entry-form">
         <input type="hidden" id="entry-id" />
+        <input type="hidden" id="entry-current-photo" />
+        <div class="form-group">
+          <label>Church Photo</label>
+          <div class="photo-upload-area" onclick="document.getElementById('entry-photo').click()">
+            <img id="photo-preview" src="" alt="Preview" style="display:none;" />
+            <div id="photo-placeholder">
+              <i data-lucide="upload"></i>
+              <span>Click to upload photo</span>
+            </div>
+          </div>
+          <input type="file" id="entry-photo" accept="image/*" style="display:none;" />
+        </div>
         <div class="form-group">
           <label for="entry-district">District</label>
           <select id="entry-district" required>

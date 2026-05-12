@@ -4,10 +4,13 @@ let districts = [];
 let allRows = [];
 let deleteTargetId = null;
 
+const STORAGE_BUCKET = 'church-photos';
+
 document.addEventListener('DOMContentLoaded', async () => {
   await loadMissions();
   setupModal();
   setupDeleteModal();
+  setupPhotoPreview();
 });
 
 async function loadMissions() {
@@ -86,6 +89,27 @@ async function loadData() {
   renderTable(allRows);
 }
 
+function setupPhotoPreview() {
+  document.getElementById('entry-photo').addEventListener('change', function () {
+    const file = this.files[0];
+    const preview = document.getElementById('photo-preview');
+    const placeholder = document.getElementById('photo-placeholder');
+    if (file) {
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'block';
+      placeholder.style.display = 'none';
+    }
+  });
+}
+
+function resetPhotoPreview() {
+  const preview = document.getElementById('photo-preview');
+  const placeholder = document.getElementById('photo-placeholder');
+  preview.src = '';
+  preview.style.display = 'none';
+  placeholder.style.display = 'flex';
+}
+
 function populateDistrictFilter(distList) {
   const sel = document.getElementById('filter-district');
   const current = sel.value;
@@ -106,11 +130,19 @@ function populateDistrictFilter(distList) {
 function renderTable(rows) {
   const tbody = document.getElementById('churches-tbody');
   if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="5" class="empty-row">No churches found.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="empty-row">No churches found.</td></tr>';
     return;
   }
-  tbody.innerHTML = rows.map(r => `
+  tbody.innerHTML = rows.map(r => {
+    const photo = r.profile_photo_url || '';
+    return `
     <tr>
+      <td>
+        ${photo
+          ? `<img src="${photo}" class="district-avatar" alt="${r.name}" />`
+          : `<div class="district-avatar-placeholder">${r.name.charAt(0).toUpperCase()}</div>`
+        }
+      </td>
       <td>${r.name}</td>
       <td>${r.districts?.name || '—'}</td>
       <td>${r.address || '—'}</td>
@@ -120,13 +152,14 @@ function renderTable(rows) {
         <button class="btn-delete" onclick="openDelete(${r.id})">Delete</button>
       </td>
     </tr>
-  `).join('');
+  `;
+  }).join('');
 }
 
 function openEditById(id) {
   const r = allRows.find(row => row.id === id);
   if (!r) return;
-  openEdit(r.id, r.district_id, r.name, r.address || '', r.latitude, r.longitude);
+  openEdit(r.id, r.district_id, r.name, r.address || '', r.latitude, r.longitude, r.profile_photo_url || '');
 }
 
 function populateDistrictSelect(selectedId) {
@@ -151,24 +184,40 @@ function setupModal() {
 function openAdd() {
   document.getElementById('modal-title').textContent = 'Add Church';
   document.getElementById('entry-id').value = '';
+  document.getElementById('entry-current-photo').value = '';
   document.getElementById('entry-form').reset();
   populateDistrictSelect(null);
+  resetPhotoPreview();
   document.getElementById('modal-msg').textContent = '';
   document.getElementById('modal-msg').className = 'modal-msg';
   document.getElementById('modal-overlay').classList.add('open');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
-function openEdit(id, districtId, name, address, lat, lng) {
+function openEdit(id, districtId, name, address, lat, lng, photoUrl) {
   document.getElementById('modal-title').textContent = 'Edit Church';
   document.getElementById('entry-id').value = id;
+  document.getElementById('entry-current-photo').value = photoUrl;
   populateDistrictSelect(districtId);
   document.getElementById('entry-name').value = name;
   document.getElementById('entry-address').value = address;
   document.getElementById('entry-latitude').value = lat != null ? lat : '';
   document.getElementById('entry-longitude').value = lng != null ? lng : '';
+
+  const preview = document.getElementById('photo-preview');
+  const placeholder = document.getElementById('photo-placeholder');
+  if (photoUrl) {
+    preview.src = photoUrl;
+    preview.style.display = 'block';
+    placeholder.style.display = 'none';
+  } else {
+    resetPhotoPreview();
+  }
+
   document.getElementById('modal-msg').textContent = '';
   document.getElementById('modal-msg').className = 'modal-msg';
   document.getElementById('modal-overlay').classList.add('open');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 function closeModal() {
@@ -181,24 +230,50 @@ async function handleSubmit(e) {
   msgEl.className = 'modal-msg';
   msgEl.textContent = '';
 
-  const id         = document.getElementById('entry-id').value;
-  const districtId = parseInt(document.getElementById('entry-district').value);
-  const name       = document.getElementById('entry-name').value.trim();
-  const address    = document.getElementById('entry-address').value.trim() || null;
-  const latVal     = document.getElementById('entry-latitude').value.trim();
-  const lngVal     = document.getElementById('entry-longitude').value.trim();
-  const latitude   = latVal !== '' ? parseFloat(latVal) : null;
-  const longitude  = lngVal !== '' ? parseFloat(lngVal) : null;
-  const btn        = document.getElementById('btn-submit');
+  const id           = document.getElementById('entry-id').value;
+  const districtId   = parseInt(document.getElementById('entry-district').value);
+  const name         = document.getElementById('entry-name').value.trim();
+  const address      = document.getElementById('entry-address').value.trim() || null;
+  const latVal       = document.getElementById('entry-latitude').value.trim();
+  const lngVal       = document.getElementById('entry-longitude').value.trim();
+  const latitude     = latVal !== '' ? parseFloat(latVal) : null;
+  const longitude    = lngVal !== '' ? parseFloat(lngVal) : null;
+  const photoFile    = document.getElementById('entry-photo').files[0];
+  const currentPhoto = document.getElementById('entry-current-photo').value;
+  const btn          = document.getElementById('btn-submit');
 
   btn.disabled = true;
   btn.textContent = 'Saving...';
 
+  let profile_photo_url = currentPhoto || null;
+
+  if (photoFile) {
+    const ext = photoFile.name.split('.').pop();
+    const filePath = `church-${Date.now()}.${ext}`;
+    const { error: uploadError } = await dbData.storage
+      .from(STORAGE_BUCKET)
+      .upload(filePath, photoFile, { upsert: true });
+
+    if (uploadError) {
+      msgEl.textContent = 'Photo upload failed. ' + uploadError.message;
+      msgEl.classList.add('error');
+      btn.disabled = false;
+      btn.textContent = 'Save';
+      return;
+    }
+
+    const { data: urlData } = dbData.storage.from(STORAGE_BUCKET).getPublicUrl(filePath);
+    profile_photo_url = urlData.publicUrl;
+
+    // Delete old photo from storage now that new one is uploaded
+    if (currentPhoto) await deleteStoragePhoto(currentPhoto, STORAGE_BUCKET);
+  }
+
   let error;
   if (id) {
-    ({ error } = await dbData.from('churches').update({ district_id: districtId, name, address, latitude, longitude }).eq('id', id));
+    ({ error } = await dbData.from('churches').update({ district_id: districtId, name, address, latitude, longitude, profile_photo_url }).eq('id', id));
   } else {
-    ({ error } = await dbData.from('churches').insert({ district_id: districtId, name, address, latitude, longitude }));
+    ({ error } = await dbData.from('churches').insert({ district_id: districtId, name, address, latitude, longitude, profile_photo_url }));
   }
 
   btn.disabled = false;
@@ -232,7 +307,15 @@ function closeDelete() {
 
 async function confirmDelete() {
   if (!deleteTargetId) return;
+  const row = allRows.find(r => r.id === deleteTargetId);
   const { error } = await dbData.from('churches').delete().eq('id', deleteTargetId);
+  if (!error && row?.profile_photo_url) await deleteStoragePhoto(row.profile_photo_url, STORAGE_BUCKET);
   closeDelete();
   if (!error) loadData();
+}
+
+function deleteStoragePhoto(url, bucket) {
+  const base = dbData.storage.from(bucket).getPublicUrl('').data.publicUrl.replace(/\/$/, '');
+  const filePath = url.replace(base + '/', '');
+  return dbData.storage.from(bucket).remove([filePath]);
 }
