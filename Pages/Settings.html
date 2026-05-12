@@ -62,174 +62,171 @@
       <!-- Settings Content -->
       <div class="settings-wrapper">
 
-        <!-- LEFT COLUMN: Profile Info + Edit Profile -->
-        <div class="settings-col">
+        <!-- LEFT: Main settings list -->
+        <div class="settings-main">
+          <div class="settings-left-spacer"></div>
 
-          <!-- Profile Info -->
-          <div class="settings-card">
-            <div class="settings-card-header">
-              <div class="card-icon-wrap"><i data-lucide="user" width="20" height="20"></i></div>
-              <div class="header-text">
-                <h3>Profile Information</h3>
-                <p>Your account details</p>
-              </div>
-              <div class="settings-menu-wrap" style="margin-left:auto;">
-                <button class="settings-burger" id="settings-burger" aria-label="Options">
-                  <i data-lucide="more-vertical"></i>
-                </button>
-                <div class="settings-dropdown" id="settings-dropdown">
-                  <button class="theme-btn" id="theme-toggle"><i data-lucide="moon"></i> Dark Mode</button>
-                  <button class="dropdown-logout" id="logout-btn"><i data-lucide="log-out"></i> Logout</button>
+          <!-- Basic Info -->
+          <div class="settings-section">
+            <h3 class="settings-section-title">Basic Info</h3>
+            <div class="settings-list">
+              <div class="settings-row">
+                <span class="settings-row-label">Full Name</span>
+                <div class="settings-row-right">
+                  <span class="settings-row-value" id="profile-name">—</span>
                 </div>
               </div>
-            </div>
-            <div class="profile-grid">
-              <div class="profile-field">
-                <span class="field-label">Full Name</span>
-                <span class="field-value" id="profile-name">—</span>
+              <div class="settings-row">
+                <span class="settings-row-label">Username</span>
+                <div class="settings-row-right">
+                  <span class="settings-row-value" id="profile-username">—</span>
+                </div>
               </div>
-              <div class="profile-field">
-                <span class="field-label">Username</span>
-                <span class="field-value" id="profile-username">—</span>
+              <div class="settings-row">
+                <span class="settings-row-label">Role</span>
+                <div class="settings-row-right">
+                  <span class="settings-row-value" id="profile-role">—</span>
+                </div>
               </div>
-              <div class="profile-field">
-                <span class="field-label">Role</span>
-                <span class="field-value" id="profile-role">—</span>
-              </div>
-              <div class="profile-field">
-                <span class="field-label">Mission Code</span>
-                <span class="field-value" id="profile-mission">—</span>
+              <div class="settings-row">
+                <span class="settings-row-label">Mission Code</span>
+                <div class="settings-row-right">
+                  <span class="settings-row-value" id="profile-mission">—</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Edit Profile -->
-          <div class="settings-card">
-            <div class="settings-card-header">
-              <div class="card-icon-wrap"><i data-lucide="pencil" width="20" height="20"></i></div>
-              <div class="header-text">
-                <h3>Edit Profile</h3>
-                <p>Update your name &amp; username</p>
+          <!-- Security -->
+          <div class="settings-section">
+            <h3 class="settings-section-title">Security</h3>
+            <div class="settings-list">
+              <div class="settings-row">
+                <span class="settings-row-label">Password</span>
+                <div class="settings-row-right">
+                  <span class="settings-row-value">••••••••••</span>
+                </div>
+              </div>
+              <div class="settings-row">
+                <span class="settings-row-label">Two-Factor Auth</span>
+                <div class="settings-row-right">
+                  <span class="tfa-dot" id="tfa-dot"></span>
+                  <span class="settings-row-value" id="tfa-status-label">Loading...</span>
+                  <div class="tfa-actions" id="tfa-actions"></div>
+                </div>
               </div>
             </div>
-            <form id="edit-profile-form">
-              <p id="profile-msg" class="settings-msg"></p>
-              <div class="form-row-2">
-                <div class="form-group">
-                  <label for="edit-fullname">Full Name</label>
-                  <input type="text" id="edit-fullname" placeholder="Enter full name" required />
-                </div>
-                <div class="form-group">
-                  <label for="edit-username">Username</label>
-                  <input type="text" id="edit-username" placeholder="Enter username" required />
+          </div>
+
+          <!-- Session -->
+          <div class="settings-section">
+            <h3 class="settings-section-title">Session</h3>
+            <div class="settings-list">
+              <div class="settings-row">
+                <span class="settings-row-label">Sign out of all devices</span>
+                <div class="settings-row-right">
+                  <button class="btn-danger btn-sm" id="btn-logout-settings">Sign Out</button>
                 </div>
               </div>
-              <button type="submit" class="btn-save" id="btn-save-profile">Save Changes</button>
-            </form>
+            </div>
+          </div>
+
+          <!-- 2FA Setup Panels (hidden until triggered) -->
+          <div class="tfa-setup-panel" id="tfa-setup-panel">
+            <p class="tfa-setup-hint">Scan this QR code with your authenticator app, then enter the 6-digit code to confirm.</p>
+            <div class="tfa-qr-wrap"><img id="tfa-qr-img" src="" alt="QR Code" /></div>
+            <div class="tfa-secret-row">
+              <span class="tfa-secret-label">Manual key:</span>
+              <code id="tfa-secret-text"></code>
+            </div>
+            <p id="tfa-setup-msg" class="settings-msg"></p>
+            <div class="tfa-confirm-row">
+              <input type="text" id="tfa-confirm-input" placeholder="Enter 6-digit code" maxlength="6" inputmode="numeric" />
+              <button class="btn-save" id="btn-tfa-confirm">Confirm &amp; Enable</button>
+              <button class="btn-tfa-cancel" id="btn-tfa-cancel">Cancel</button>
+            </div>
+          </div>
+          <div class="tfa-setup-panel" id="tfa-view-panel">
+            <p class="tfa-setup-hint">Use this QR code to re-add your account to a new authenticator app.</p>
+            <div class="tfa-qr-wrap"><img id="tfa-view-qr-img" src="" alt="QR Code" /></div>
+            <div class="tfa-secret-row">
+              <span class="tfa-secret-label">Manual key:</span>
+              <code id="tfa-view-secret-text"></code>
+            </div>
+            <button class="btn-tfa-cancel" id="btn-view-close" style="margin-top:0.75rem;">Close</button>
           </div>
 
         </div>
 
-        <!-- CENTER COLUMN: Change Password -->
-        <div class="settings-col">
+        <!-- RIGHT: Options menu + Edit panel -->
+        <div class="settings-side">
+          <div class="settings-menu-wrap settings-menu-top">
+            <button class="settings-burger" id="settings-burger" aria-label="Options">
+              <i data-lucide="more-vertical"></i>
+            </button>
+            <div class="settings-dropdown" id="settings-dropdown">
+              <button class="theme-btn" id="theme-toggle"><i data-lucide="moon"></i> Dark Mode</button>
+              <button class="dropdown-logout" id="logout-btn"><i data-lucide="log-out"></i> Logout</button>
+            </div>
+          </div>
+
+          <!-- Edit Profile -->
+          <div class="settings-section">
+            <h3 class="settings-section-title">Edit Profile</h3>
+            <div class="settings-list edit-list">
+              <form id="edit-profile-form">
+                <p id="profile-msg" class="settings-msg" style="margin:0.5rem 1.4rem 0;"></p>
+                <div class="edit-row">
+                  <label for="edit-fullname">Full Name</label>
+                  <input type="text" id="edit-fullname" placeholder="Enter full name" required />
+                </div>
+                <div class="edit-row">
+                  <label for="edit-username">Username</label>
+                  <input type="text" id="edit-username" placeholder="Enter username" required />
+                </div>
+                <div class="edit-row edit-row-action">
+                  <button type="submit" class="btn-edit-save" id="btn-save-profile">Save Changes</button>
+                </div>
+              </form>
+            </div>
+          </div>
 
           <!-- Change Password -->
-          <div class="settings-card">
-            <div class="settings-card-header">
-              <div class="card-icon-wrap"><i data-lucide="lock" width="20" height="20"></i></div>
-              <div class="header-text">
-                <h3>Change Password</h3>
-                <p>Update your login password</p>
-              </div>
-            </div>
-            <form id="change-password-form">
-              <p id="pw-msg" class="settings-msg"></p>
-              <div class="form-group">
-                <label for="current-password">Current Password</label>
-                <div class="input-wrapper">
-                  <input type="password" id="current-password" placeholder="Enter current password" required />
-                  <span class="toggle-password" data-target="current-password"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+          <div class="settings-section">
+            <h3 class="settings-section-title">Change Password</h3>
+            <div class="settings-list edit-list">
+              <form id="change-password-form">
+                <p id="pw-msg" class="settings-msg" style="margin:0.5rem 1.4rem 0;"></p>
+                <div class="edit-row">
+                  <label for="current-password">Current Password</label>
+                  <div class="input-wrapper">
+                    <input type="password" id="current-password" placeholder="Current password" required />
+                    <span class="toggle-password" data-target="current-password"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                  </div>
                 </div>
-              </div>
-              <div class="form-row-2">
-                <div class="form-group">
+                <div class="edit-row">
                   <label for="new-password">New Password</label>
                   <div class="input-wrapper">
                     <input type="password" id="new-password" placeholder="New password" required />
                     <span class="toggle-password" data-target="new-password"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
                   </div>
                 </div>
-                <div class="form-group">
+                <div class="edit-row">
                   <label for="confirm-password">Confirm Password</label>
                   <div class="input-wrapper">
                     <input type="password" id="confirm-password" placeholder="Confirm password" required />
                     <span class="toggle-password" data-target="confirm-password"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
                   </div>
                 </div>
-              </div>
-              <button type="submit" class="btn-save" id="btn-save-pw">Update Password</button>
-            </form>
-          </div>
-
-          <!-- Session -->
-          <div class="settings-card danger-zone">
-            <div class="settings-card-header">
-              <div class="card-icon-wrap"><i data-lucide="shield-alert" width="20" height="20"></i></div>
-              <div class="header-text">
-                <h3>Session</h3>
-                <p>Manage your active session</p>
-              </div>
-            </div>
-            <button class="btn-danger" id="btn-logout-settings">Sign Out of All Sessions</button>
-          </div>
-
-        </div>
-
-        <!-- RIGHT COLUMN: 2FA -->
-        <div class="settings-col">
-
-          <!-- Two-Factor Authentication -->
-          <div class="settings-card">
-            <div class="settings-card-header">
-              <div class="card-icon-wrap"><i data-lucide="shield-check" width="20" height="20"></i></div>
-              <div class="header-text">
-                <h3>Two-Factor Auth</h3>
-                <p>Extra layer of security</p>
-              </div>
-            </div>
-            <div class="tfa-status-row">
-              <div class="tfa-status-info">
-                <span class="tfa-dot" id="tfa-dot"></span>
-                <span class="tfa-status-label" id="tfa-status-label">Loading...</span>
-              </div>
-              <div class="tfa-actions" id="tfa-actions"></div>
-            </div>
-            <div class="tfa-setup-panel" id="tfa-setup-panel">
-              <p class="tfa-setup-hint">Scan this QR code with your authenticator app, then enter the 6-digit code to confirm.</p>
-              <div class="tfa-qr-wrap"><img id="tfa-qr-img" src="" alt="QR Code" /></div>
-              <div class="tfa-secret-row">
-                <span class="tfa-secret-label">Manual key:</span>
-                <code id="tfa-secret-text"></code>
-              </div>
-              <p id="tfa-setup-msg" class="settings-msg"></p>
-              <div class="tfa-confirm-row">
-                <input type="text" id="tfa-confirm-input" placeholder="Enter 6-digit code" maxlength="6" inputmode="numeric" />
-                <button class="btn-save" id="btn-tfa-confirm">Confirm &amp; Enable</button>
-                <button class="btn-tfa-cancel" id="btn-tfa-cancel">Cancel</button>
-              </div>
-            </div>
-            <div class="tfa-setup-panel" id="tfa-view-panel">
-              <p class="tfa-setup-hint">Use this QR code to re-add your account to a new authenticator app.</p>
-              <div class="tfa-qr-wrap"><img id="tfa-view-qr-img" src="" alt="QR Code" /></div>
-              <div class="tfa-secret-row">
-                <span class="tfa-secret-label">Manual key:</span>
-                <code id="tfa-view-secret-text"></code>
-              </div>
-              <button class="btn-tfa-cancel" id="btn-view-close" style="margin-top:0.75rem;">Close</button>
+                <div class="edit-row edit-row-action">
+                  <button type="submit" class="btn-edit-save" id="btn-save-pw">Update Password</button>
+                </div>
+              </form>
             </div>
           </div>
 
         </div>
+
       </div>
     </main>
   </div>
@@ -267,6 +264,8 @@
       dropdown.classList.toggle('open');
     });
     document.addEventListener('click', () => dropdown.classList.remove('open'));
+
+
   </script>
 </body>
 </html>
