@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (churchIds.length === 0) {
     setStats(0, 0, 0, 0);
     renderRecent([]);
-    renderUsers([], missionMap);
     return;
   }
 
@@ -55,18 +54,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   ].sort((a, b) => b.year - a.year || b.month - a.month).slice(0, 8);
 
   renderRecent(combined);
-
-  // Fetch viewer users
-  const missionCodes = missions.map(m => m.code);
-  const { data: usersData } = await db
-    .from('users')
-    .select('full_name, username, mission_code, is_active')
-    .in('mission_code', missionCodes)
-    .eq('role', 'viewer')
-    .order('mission_code')
-    .order('full_name');
-
-  renderUsers(usersData || [], missionMap);
 });
 
 function setStats(tithes, offerings, churchCount, districtCount) {
@@ -97,27 +84,3 @@ function renderRecent(rows) {
   `).join('');
 }
 
-function renderUsers(rows, missionMap) {
-  const tbody = document.getElementById('users-tbody');
-  if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="4" class="dash-loading">No viewer accounts found.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = rows.map(r => `
-    <tr>
-      <td>
-        <span class="mission-tag">${r.mission_code || '—'}</span>
-      </td>
-      <td>
-        <div class="dash-user-cell">
-          <div class="dash-avatar">${r.full_name.charAt(0).toUpperCase()}</div>
-          <span>${r.full_name}</span>
-        </div>
-      </td>
-      <td><code class="dash-code">${r.username}</code></td>
-      <td><span class="dash-status ${r.is_active ? 'active' : 'inactive'}">${
-        r.is_active ? 'Active' : 'Inactive'
-      }</span></td>
-    </tr>
-  `).join('');
-}
